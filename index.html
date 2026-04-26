@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Kingdom of Welcome – Your Second Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Milonga&family=Berkshire+Swash&family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --midnight: #0d1b2a;
+  --slate: #2e4057;
+  --sand: #f5e6c8;
+  --ochre: #c8843a;
+  --gold: #D4AF37;
+  --morocco-red: #8C1D2A;
+  --morocco-green: #006233;
+  --white: #ffffff;
+  --light-sand: #fdf6e9;
+  --deep-navy: #071220;
+  --text-primary: #f5e6c8;
+  --text-secondary: #b0c4d8;
+  --bg-primary: #0d1b2a;
+  --bg-secondary: #162435;
+  --bg-card: rgba(255,255,255,0.06);
+  --border-gold: rgba(212,175,55,0.3);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="light"] {
+  --text-primary: #1a2a3a;
+  --text-secondary: #3d5166;
+  --bg-primary: #fdf6e9;
+  --bg-secondary: #f0e4cc;
+  --bg-card: rgba(0,0,0,0.05);
+  --border-gold: rgba(180,130,20,0.4);
+  --midnight: #fdf6e9;
+  --deep-navy: #e8d9be;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+h1, h2, h3 { font-family: 'Berkshire Swash', cursive; }
+.milonga { font-family: 'Milonga', cursive; }
+
+/* ===== ANIMATED BACKGROUND ===== */
+.motion-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  animation: driftBlob linear infinite;
+}
+.blob-1 { width: 500px; height: 500px; background: var(--slate); top: -100px; left: -150px; animation-duration: 22s; }
+.blob-2 { width: 400px; height: 400px; background: var(--ochre); top: 40%; right: -100px; animation-duration: 18s; animation-delay: -8s; }
+.blob-3 { width: 350px; height: 350px; background: var(--morocco-green); bottom: -80px; left: 30%; animation-duration: 25s; animation-delay: -5s; }
+.blob-4 { width: 300px; height: 300px; background: var(--gold); top: 60%; left: 10%; animation-duration: 20s; animation-delay: -12s; }
+@keyframes driftBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.05); }
+  66% { transform: translate(-30px, 40px) scale(0.97); }
+}
+
+/* Floating icons */
+.float-icons { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.float-icon {
+  position: absolute;
+  opacity: 0.06;
+  animation: floatUp linear infinite;
+  color: var(--gold);
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.06; }
+  90% { opacity: 0.06; }
+  100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
+}
+
+/* Calligraphy BG */
+.calligraphy-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.calli-text {
+  position: absolute;
+  font-size: 8rem;
+  opacity: 0.025;
+  color: var(--gold);
+  font-family: 'Berkshire Swash', cursive;
+  animation: floatCalli 30s linear infinite;
+  white-space: nowrap;
+}
+@keyframes floatCalli {
+  0% { transform: translateY(100vh) rotate(-15deg); opacity: 0; }
+  5% { opacity: 0.025; }
+  95% { opacity: 0.025; }
+  100% { transform: translateY(-200px) rotate(-15deg); opacity: 0; }
+}
+
+/* Moroccan Lantern SVGs */
+.lantern {
+  position: absolute;
+  opacity: 0.07;
+  animation: driftLantern ease-in-out infinite;
+}
+@keyframes driftLantern {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-30px) rotate(3deg); }
+}
+
+/* ===== NAVBAR ===== */
+#navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(13, 27, 42, 0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-gold);
+  padding: 0 2rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: var(--transition);
+}
+[data-theme="light"] #navbar {
+  background: rgba(253, 246, 233, 0.92);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-logo-icon {
+  width: 44px; height: 44px;
+  position: relative;
+}
+.nav-logo-text {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.1rem;
+  color: var(--gold);
+  line-height: 1.2;
+}
+.nav-logo-text span {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--sand);
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0.2rem;
+}
+.nav-links a {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--gold);
+  transition: var(--transition);
+  border-radius: 2px;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--gold);
+}
+.nav-links a:hover::after, .nav-links a.active::after {
+  left: 10%; right: 10%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Contact top bar */
+.top-bar {
+  background: var(--morocco-green);
+  padding: 6px 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  font-size: 0.78rem;
+  color: var(--sand);
+  font-family: 'Open Sans', sans-serif;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1001;
+}
+.top-bar a { color: var(--sand); text-decoration: none; }
+.top-bar span { display: flex; align-items: center; gap: 6px; }
+
+/* Offset for top-bar + navbar */
+#navbar { top: 30px; }
+body { padding-top: 102px; }
+
+/* Dark/Light toggle */
+.toggle-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  color: var(--gold);
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+.toggle-btn:hover { background: var(--gold); color: var(--midnight); }
+
+/* Language dropdown */
+.lang-dropdown {
+  position: relative;
+}
+.lang-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  color: var(--gold);
+  padding: 0 14px;
+  height: 38px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: 'Open Sans', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+  transition: var(--transition);
+}
+.lang-btn:hover { background: var(--gold); color: var(--midnight); }
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  min-width: 130px;
+  overflow: hidden;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  z-index: 999;
+}
+.lang-menu.open { display: block; animation: fadeDown 0.2s ease; }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.lang-menu button {
+  display: block; width: 100%;
+  padding: 10px 16px;
+  background: none; border: none;
+  color: var(--text-primary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+.lang-menu button:hover { background: rgba(212,175,55,0.15); color: var(--gold); }
+
+/* Hamburger for mobile */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--gold); border-radius: 2px; transition: var(--transition); }
+
+/* ===== SECTIONS ===== */
+.section { min-height: 100vh; display: none; position: relative; z-index: 1; }
+.section.active { display: block; animation: sectionIn 0.6s ease; }
+@keyframes sectionIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== HERO ===== */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(7,18,32,0.7) 0%, rgba(13,27,42,0.55) 50%, rgba(7,18,32,0.9) 100%),
+    url('https://images.unsplash.com/photo-1548013146-72479768bada?w=1800&q=80') center/cover no-repeat;
+  z-index: 0;
+}
+.hero-particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: white;
+  border-radius: 50%;
+  animation: particleDrift linear infinite;
+  opacity: 0.4;
+}
+@keyframes particleDrift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-80vh) translateX(40px); opacity: 0; }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,175,55,0.15);
+  border: 1px solid rgba(212,175,55,0.4);
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+.hero-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease 0.4s both;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+.hero-title .gold { color: var(--gold); }
+.hero-sub {
+  font-family: 'Milonga', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--sand);
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease 0.6s both;
+  letter-spacing: 2px;
+}
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--ochre), var(--gold));
+  color: var(--midnight);
+  padding: 14px 32px;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 8px 30px rgba(212,175,55,0.35);
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(212,175,55,0.5); }
+.btn-outline {
+  background: transparent;
+  color: var(--sand);
+  padding: 14px 32px;
+  border: 1px solid rgba(245,230,200,0.4);
+  border-radius: 50px;
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Scroll indicator */
+.scroll-ind {
+  position: absolute;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; color: rgba(255,255,255,0.5); font-size: 0.7rem; letter-spacing: 2px;
+  animation: bounce 2s ease infinite;
+}
+.scroll-ind::before {
+  content: '';
+  display: block;
+  width: 24px; height: 36px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  position: relative;
+}
+.scroll-ind::after {
+  content: '';
+  position: absolute;
+  top: 6px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 8px;
+  background: var(--gold);
+  border-radius: 2px;
+  animation: scrollDot 2s ease infinite;
+}
+@keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+@keyframes scrollDot { 0%,100% { transform: translateX(-50%) translateY(0); opacity: 1; } 100% { transform: translateX(-50%) translateY(12px); opacity: 0; } }
+
+/* ===== LOGO ANIMATION ===== */
+.logo-animated {
+  display: flex; flex-direction: column; align-items: center;
+  margin: 4rem auto 3rem;
+  cursor: pointer;
+  width: fit-content;
+}
+.logo-star-wrap {
+  position: relative;
+  width: 120px; height: 120px;
+  margin-bottom: 1rem;
+}
+.logo-star-outer {
+  position: absolute;
+  inset: 0;
+  animation: rotateOuter 10s linear infinite;
+}
+.logo-star-inner {
+  position: absolute;
+  inset: 15px;
+  animation: rotateInner 8s linear infinite reverse;
+}
+.logo-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+}
+.pulse-dot {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 12px; height: 12px;
+  background: #e53e3e;
+  border-radius: 50%;
+  animation: pulseDot 1.5s ease infinite;
+  z-index: 10;
+}
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229,62,62,0.7); transform: scale(1); }
+  50% { box-shadow: 0 0 0 8px rgba(229,62,62,0); transform: scale(1.2); }
+}
+@keyframes rotateOuter { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rotateInner { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.logo-star-wrap:hover .logo-star-outer,
+.logo-star-wrap:hover .logo-star-inner { filter: drop-shadow(0 0 18px var(--gold)); }
+.logo-text-main {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 2rem;
+  color: var(--gold);
+  text-align: center;
+}
+.logo-slogan {
+  font-family: 'Milonga', cursive;
+  font-size: 0.9rem;
+  color: var(--sand);
+  letter-spacing: 3px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  text-align: center;
+  padding: 5rem 2rem 3rem;
+  position: relative;
+}
+.section-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+.section-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+.section-line {
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--ochre), var(--gold));
+  margin: 0 auto 1.5rem;
+  border-radius: 3px;
+}
+.section-desc {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* ===== ZELLIJ DIVIDER ===== */
+.zellij-divider {
+  height: 20px;
+  background:
+    repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 6px, transparent 6px, transparent 14px),
+    repeating-linear-gradient(0deg, var(--ochre) 0, var(--ochre) 2px, transparent 2px, transparent 20px);
+  opacity: 0.25;
+  margin: 2rem 0;
+}
+
+/* ===== FORMULA (STORIES) ===== */
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+}
+.story-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.7s ease both;
+}
+.story-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 20px 60px rgba(212,175,55,0.15); }
+.story-img {
+  width: 100%; height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.story-body { padding: 1.5rem; }
+.story-name {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.story-origin {
+  font-size: 0.78rem;
+  color: var(--ochre);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+.story-quote {
+  font-style: italic;
+  color: var(--gold);
+  font-size: 1rem;
+  line-height: 1.6;
+  border-left: 3px solid var(--gold);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-family: 'Milonga', cursive;
+}
+.story-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* ===== REGISTRATION FORM ===== */
+.form-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+}
+.moorish-arch-header {
+  background: linear-gradient(135deg, var(--morocco-green), #004d27);
+  border-radius: 0 0 50% 50% / 0 0 40% 40%;
+  padding: 2.5rem 2rem 3.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.moorish-arch-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.moorish-arch-header h2 {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.8rem;
+  color: var(--sand);
+  position: relative;
+  z-index: 1;
+}
+.moorish-arch-header p {
+  color: rgba(245,230,200,0.8);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+}
+.form-section-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin: 1.5rem 0 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.form-section-title::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 2px;
+  background: var(--gold);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text-primary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  outline: none;
+  width: 100%;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold);
+  background: rgba(212,175,55,0.07);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+.form-group textarea { min-height: 120px; resize: vertical; }
+.form-group select option { background: var(--bg-secondary); }
+.drop-zone {
+  border: 2px dashed var(--border-gold);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.drop-zone:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+.drop-zone svg { margin-bottom: 0.5rem; }
+.btn-submit {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--morocco-red), #b02035);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  animation: pulseBtn 2s ease infinite;
+  letter-spacing: 1px;
+}
+.btn-submit:hover { animation: none; transform: translateY(-3px); box-shadow: 0 10px 40px rgba(140,29,42,0.5); }
+@keyframes pulseBtn {
+  0%, 100% { box-shadow: 0 6px 30px rgba(140,29,42,0.4); }
+  50% { box-shadow: 0 6px 50px rgba(140,29,42,0.7); }
+}
+
+/* ===== HELP & CARE CENTRES ===== */
+.table-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+}
+thead tr {
+  background: linear-gradient(135deg, var(--morocco-green), #004d27);
+}
+thead th {
+  padding: 16px 20px;
+  text-align: left;
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 0.9rem;
+  color: var(--sand);
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(212,175,55,0.3);
+}
+tbody tr {
+  border-bottom: 1px solid var(--border-gold);
+  transition: var(--transition);
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(212,175,55,0.06); }
+tbody td {
+  padding: 14px 20px;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+.service-code {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 0.85rem;
+}
+.location-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(0,98,51,0.2);
+  border: 1px solid rgba(0,98,51,0.4);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: #4fce92;
+}
+.contact-link {
+  color: var(--ochre);
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+}
+.contact-link:hover { color: var(--gold); }
+
+/* ===== ID CARD SECTION ===== */
+.id-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+}
+.id-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Card 3D */
+.card-scene {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.card-3d {
+  width: 100%;
+  aspect-ratio: 1.586;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.card-3d.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.card-front {
+  background: linear-gradient(135deg, #8C1D2A 0%, #6a1522 40%, #006233 100%);
+  border: 2px solid rgba(212,175,55,0.5);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212,175,55,0.15);
+}
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, #1a1a1a 50%, #0d1b2a 100%);
+  border: 2px solid rgba(212,175,55,0.5);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+/* Holographic stripe */
+.holo-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 100%;
+  background: linear-gradient(105deg,
+    transparent 40%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 60%
+  );
+  animation: holoSweep 4s ease infinite;
+  pointer-events: none;
+  border-radius: 18px;
+}
+@keyframes holoSweep {
+  0%, 100% { background-position: -100% 0; opacity: 0.3; }
+  50% { background-position: 200% 0; opacity: 0.8; }
+}
+.card-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--gold), var(--ochre), var(--morocco-green));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s;
+  filter: blur(10px);
+}
+.card-scene:hover .card-glow { opacity: 0.4; }
+.card-header-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.card-title-block .card-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+.card-title-block .card-subtitle {
+  font-size: 0.6rem;
+  color: rgba(245,230,200,0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.card-star-sm { width: 32px; height: 32px; }
+.card-middle-row {
+  display: flex; gap: 1rem; align-items: center;
+}
+.card-photo {
+  width: 72px; height: 72px;
+  border-radius: 10px;
+  border: 2px solid rgba(212,175,55,0.5);
+  object-fit: cover;
+  background: rgba(255,255,255,0.1);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.card-photo svg { color: rgba(255,255,255,0.3); }
+.card-info { flex: 1; }
+.card-field {
+  margin-bottom: 4px;
+}
+.card-field .lbl {
+  font-size: 0.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245,230,200,0.5);
+}
+.card-field .val {
+  font-size: 0.75rem;
+  color: var(--white);
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+.card-footer-row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.card-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(0,98,51,0.3);
+  border: 1px solid rgba(0,180,80,0.4);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.6rem;
+  color: #4fce92;
+  letter-spacing: 1px;
+}
+.card-status::before { content: '●'; font-size: 0.5rem; animation: pulseDot 1.5s infinite; }
+.card-qr {
+  width: 44px; height: 44px;
+  background: white;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px;
+}
+.card-access {
+  font-size: 0.58rem;
+  color: rgba(245,230,200,0.6);
+  letter-spacing: 1px;
+}
+/* Card back content */
+.card-back-stripe {
+  width: 100%;
+  height: 36px;
+  background: #111;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+.card-back-text {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.8;
+}
+.card-back-logo {
+  margin-top: 1rem;
+  font-family: 'Berkshire Swash', cursive;
+  color: var(--gold);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.card-hint {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  margin-top: 0.75rem;
+  letter-spacing: 1px;
+}
+
+/* ID Form */
+.id-form { }
+.id-form-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+.id-form .form-group { margin-bottom: 1rem; }
+.id-form input,
+.id-form select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.88rem;
+  width: 100%; outline: none;
+  transition: var(--transition);
+}
+.id-form input:focus, .id-form select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+}
+.id-form label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* 4 Boxes */
+.boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.box-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+}
+.box-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(212,175,55,0.12); }
+.box-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--ochre), var(--gold));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+.box-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.box-desc { color: var(--text-secondary); font-size: 0.83rem; line-height: 1.6; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,18,32,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+.modal-overlay.open .modal-box { transform: scale(1); }
+.modal-title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-close {
+  background: none; border: none;
+  color: var(--text-secondary); font-size: 1.5rem;
+  cursor: pointer; transition: color 0.2s;
+}
+.modal-close:hover { color: var(--gold); }
+.modal-list { list-style: none; }
+.modal-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-gold);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  display: flex; gap: 10px;
+}
+.modal-list li::before { content: '◆'; color: var(--gold); font-size: 0.6rem; margin-top: 5px; flex-shrink: 0; }
+.modal-list li:last-child { border-bottom: none; }
+.modal-center-detail { margin-bottom: 1.5rem; }
+.modal-center-detail h4 {
+  font-family: 'Berkshire Swash', cursive;
+  color: var(--gold);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.modal-center-detail p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: rgba(7,18,32,0.98);
+  border-top: 1px solid var(--border-gold);
+  padding: 4rem 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+[data-theme="light"] footer { background: rgba(240,228,204,0.98); }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+.footer-brand .footer-logo-text {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+.footer-brand p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  max-width: 280px;
+}
+.social-icons { display: flex; gap: 12px; }
+.social-icon {
+  width: 38px; height: 38px;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: var(--transition);
+  text-decoration: none;
+  cursor: pointer;
+}
+.social-icon:hover { background: var(--gold); color: var(--midnight); border-color: var(--gold); }
+.footer-col h4 {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+.footer-col ul li a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover { color: var(--gold); }
+.footer-bottom {
+  border-top: 1px solid var(--border-gold);
+  padding-top: 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-bottom span { color: var(--gold); }
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto 4rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+.stat-item {
+  flex: 1;
+  min-width: 150px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border-right: 1px solid var(--border-gold);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 2.2rem;
+  color: var(--gold);
+  display: block;
+}
+.stat-lbl {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ===== VALUES SECTION ===== */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+}
+.value-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+}
+.value-card:hover { transform: translateY(-6px); border-color: var(--gold); }
+.value-icon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+.value-title {
+  font-family: 'Berkshire Swash', cursive;
+  color: var(--gold);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.value-desc { color: var(--text-secondary); font-size: 0.83rem; line-height: 1.7; }
+
+/* ===== FORMULA SECTION EXTRA ===== */
+.formula-intro {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+  text-align: center;
+}
+.formula-intro p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border-gold); padding: 1rem; }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  .id-layout { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .boxes-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 2.5rem; }
+  .stories-grid { grid-template-columns: 1fr; }
+  body { padding-top: 90px; }
+}
+
+/* ===== LOADING ANIM ===== */
+.loader {
+  position: fixed; inset: 0;
+  background: var(--deep-navy);
+  z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+.loader.hidden { opacity: 0; visibility: hidden; }
+.loader-star {
+  width: 80px; height: 80px;
+  animation: rotateOuter 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+.loader-text {
+  font-family: 'Berkshire Swash', cursive;
+  color: var(--gold);
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* Number counter anim */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <svg class="loader-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="none" stroke="#D4AF37" stroke-width="2"/>
+    <polygon points="50,20 58,38 78,38 63,50 69,70 50,58 31,70 37,50 22,38 42,38" fill="rgba(212,175,55,0.3)" stroke="#D4AF37" stroke-width="1"/>
+    <circle cx="50" cy="50" r="8" fill="#D4AF37"/>
+  </svg>
+  <div class="loader-text">The Kingdom of Welcome</div>
+</div>
+
+<!-- MOTION BACKGROUND -->
+<div class="motion-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- FLOATING ICONS -->
+<div class="float-icons" id="floatIcons"></div>
+
+<!-- CALLIGRAPHY -->
+<div class="calligraphy-bg" id="calligraphyBg"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span id="modal-title-text">Info</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <span>✉ <a href="mailto:contactthekingdomofwelcome@gmail.com">contactthekingdomofwelcome@gmail.com</a></span>
+  <span>📞 <a href="tel:+2125xxxxxxxx">+212 5xx xxx xxx</a></span>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="showSection('home')">
+    <svg class="nav-logo-icon" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+      <!-- Moroccan arch icon -->
+      <rect x="6" y="20" width="32" height="18" rx="2" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+      <path d="M6 20 Q6 6 22 6 Q38 6 38 20" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+      <rect x="16" y="28" width="12" height="10" rx="2" fill="rgba(212,175,55,0.3)"/>
+      <circle cx="22" cy="16" r="3" fill="rgba(212,175,55,0.5)"/>
+      <line x1="10" y1="14" x2="34" y2="14" stroke="rgba(212,175,55,0.3)" stroke-width="0.8"/>
+    </svg>
+    <div class="nav-logo-text">
+      The Kingdom of Welcome
+      <span>Your Second Home</span>
+    </div>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="showSection('home')" class="active" data-section="home" data-i18n="nav-home">Home</a></li>
+    <li><a href="#" onclick="showSection('formula')" data-section="formula" data-i18n="nav-formula">Formula</a></li>
+    <li><a href="#" onclick="showSection('centers')" data-section="centers" data-i18n="nav-centers">Help & Care Centers</a></li>
+    <li><a href="#" onclick="showSection('idcard')" data-section="idcard" data-i18n="nav-id">Refugee ID Card</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <div class="lang-dropdown">
+      <button class="lang-btn" onclick="toggleLang()" id="langBtn">
+        <span>🌐</span> <span id="langLabel">EN</span> ▾
+      </button>
+      <div class="lang-menu" id="langMenu">
+        <button onclick="setLang('en')">🇬🇧 English</button>
+        <button onclick="setLang('fr')">🇫🇷 Français</button>
+        <button onclick="setLang('ar')">🇲🇦 العربية</button>
+      </div>
+    </div>
+    <button class="toggle-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- =============================== HOME SECTION =============================== -->
+<section id="section-home" class="section active">
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77l-6.18 3.25L7 13.14 2 8.27l6.91-1.01L12 1z"/></svg>
+        <span data-i18n="hero-badge">Humanitarian Refuge in Morocco</span>
+      </div>
+      <h1 class="hero-title">A <span class="gold">Kingdom</span><br/>of Hospitality.</h1>
+      <p class="hero-sub" data-i18n="hero-sub">Welcome to Morocco · Your Second Home</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="showSection('formula')" data-i18n="hero-cta1">Begin Your Journey</button>
+        <button class="btn-outline" onclick="showSection('centers')" data-i18n="hero-cta2">Find Support Centers</button>
+      </div>
+    </div>
+    <div class="scroll-ind"></div>
+  </div>
+
+  <!-- ANIMATED LOGO -->
+  <div style="padding: 4rem 2rem 0;">
+    <div class="logo-animated">
+      <div class="logo-star-wrap">
+        <!-- Outer rotating 8-pointed star -->
+        <svg class="logo-star-outer" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="60,4 70,35 102,35 78,54 87,87 60,68 33,87 42,54 18,35 50,35" fill="none" stroke="#D4AF37" stroke-width="2"/>
+          <polygon points="60,4 68,14 76,4 80,14 90,9 88,20 100,19 94,29 104,35 94,37 99,48 88,46 88,58 78,53 74,64 65,57 60,68 55,57 46,64 42,53 32,58 32,46 21,48 26,37 16,35 26,29 20,19 32,20 30,9 40,14 44,4 52,14" fill="rgba(212,175,55,0.08)" stroke="rgba(212,175,55,0.3)" stroke-width="0.5"/>
+        </svg>
+        <!-- Inner counter-rotating star -->
+        <svg class="logo-star-inner" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="45,5 52,24 72,24 57,37 63,57 45,44 27,57 33,37 18,24 38,24" fill="rgba(200,132,58,0.3)" stroke="#c8843a" stroke-width="1.5"/>
+          <polygon points="45,15 49,26 61,26 52,33 55,45 45,38 35,45 38,33 29,26 41,26" fill="rgba(212,175,55,0.2)" stroke="#D4AF37" stroke-width="1"/>
+        </svg>
+        <!-- ShieldCheck center -->
+        <div class="logo-center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+        <div class="pulse-dot"></div>
+      </div>
+      <div class="logo-text-main" data-i18n="logo-main">The Kingdom of Welcome</div>
+      <div class="logo-slogan" data-i18n="logo-slogan">Welcome to Morocco · Your Second Home</div>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" style="margin: 0 auto 4rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <div class="stat-item">
+      <span class="stat-num" data-count="12400">12,400+</span>
+      <span class="stat-lbl" data-i18n="stat1">Refugees Welcomed</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">7</span>
+      <span class="stat-lbl" data-i18n="stat2">Care Centers</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">3</span>
+      <span class="stat-lbl" data-i18n="stat3">Host Cities</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">98%</span>
+      <span class="stat-lbl" data-i18n="stat4">Satisfaction Rate</span>
+    </div>
+  </div>
+
+  <!-- VALUES -->
+  <div class="section-header">
+    <div class="section-tag" data-i18n="values-tag">Our Commitment</div>
+    <h2 class="section-title" data-i18n="values-title">Built on Moroccan Values</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <span class="value-icon">🕊️</span>
+      <div class="value-title" data-i18n="val1-t">Safety</div>
+      <p class="value-desc" data-i18n="val1-d">A secure, dignified space where every person is protected and valued.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">🤝</span>
+      <div class="value-title" data-i18n="val2-t">Community</div>
+      <p class="value-desc" data-i18n="val2-d">Building bridges between cultures with warmth and respect.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">💚</span>
+      <div class="value-title" data-i18n="val3-t">Care</div>
+      <p class="value-desc" data-i18n="val3-d">Holistic support from medical aid to mental wellness and beyond.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">✨</span>
+      <div class="value-title" data-i18n="val4-t">Dignity</div>
+      <p class="value-desc" data-i18n="val4-d">Every individual deserves to be seen, heard, and celebrated.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">🌱</span>
+      <div class="value-title" data-i18n="val5-t">Growth</div>
+      <p class="value-desc" data-i18n="val5-d">Empowering new beginnings through education, work, and opportunity.</p>
+    </div>
+  </div>
+  <div class="zellij-divider"></div>
+
+</section>
+
+<!-- =============================== FORMULA SECTION =============================== -->
+<section id="section-formula" class="section">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="formula-tag">Our Program</div>
+    <h2 class="section-title" data-i18n="formula-title">The Formula</h2>
+    <div class="section-line"></div>
+    <p class="section-desc" data-i18n="formula-desc">Real stories of transformation, hope, and belonging — from those who found their second home in Morocco.</p>
+  </div>
+
+  <div class="formula-intro">
+    <p data-i18n="formula-intro">The Kingdom of Welcome offers a comprehensive humanitarian program combining safe housing, personalized guidance, health support, and community integration. Below are the stories of those who've walked this path before you.</p>
+  </div>
+
+  <!-- STORIES -->
+  <div class="stories-grid">
+    <!-- Story 1 -->
+    <div class="story-card" style="animation-delay: 0.1s">
+      <img class="story-img" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80" alt="Marie from Congo"/>
+      <div class="story-body">
+        <div class="story-name">Marie</div>
+        <div class="story-origin">🇨🇩 Congo · Marrakech</div>
+        <h3 style="font-size:1rem; color: var(--text-primary); font-family:'Berkshire Swash',cursive; margin-bottom:0.8rem;">Finding Peace in Marrakech</h3>
+        <p class="story-text">Marie fled the conflict in Congo with her young daughter. At The Kingdom of Welcome, she found a safe home in Marrakech's serene riads.</p>
+        <div class="story-quote">"This place is more than a refuge. It's Peace."</div>
+        <p class="story-text">Aïcha now volunteers helping others adjust to life in Morocco, becoming a pillar of the community she once arrived at as a stranger.</p>
+      </div>
+    </div>
+    <!-- Story 2 -->
+    <div class="story-card" style="animation-delay: 0.25s">
+      <img class="story-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Jamal from Syria"/>
+      <div class="story-body">
+        <div class="story-name">Jamal</div>
+        <div class="story-origin">🇸🇾 Syria · Fez</div>
+        <h3 style="font-size:1rem; color: var(--text-primary); font-family:'Berkshire Swash',cursive; margin-bottom:0.8rem;">A New Chapter in Morocco</h3>
+        <p class="story-text">Jamal arrived in Morocco seeking safety and opportunity. At our refuge, he received support to start a bakery business in Fez.</p>
+        <div class="story-quote">"Morocco gave me a chance to rebuild."</div>
+        <p class="story-text">Jamal now employs other refugees and locals, creating connections through delicious pastries and a shared sense of belonging.</p>
+      </div>
+    </div>
+    <!-- Story 3 -->
+    <div class="story-card" style="animation-delay: 0.4s">
+      <img class="story-img" src="https://images.unsplash.com/photo-1488508872907-592763824245?w=600&q=80" alt="Lina from Venezuela"/>
+      <div class="story-body">
+        <div class="story-name">Lina</div>
+        <div class="story-origin">🇻🇪 Venezuela · Casablanca</div>
+        <h3 style="font-size:1rem; color: var(--text-primary); font-family:'Berkshire Swash',cursive; margin-bottom:0.8rem;">From Struggle to Strength</h3>
+        <p class="story-text">Lina traveled far to escape hardship in Venezuela. At The Kingdom of Welcome, she accessed healthcare and language classes.</p>
+        <div class="story-quote">"This place helped me find my voice."</div>
+        <p class="story-text">Lina now advocates for refugee rights, inspiring others to thrive in their new home and stand with dignity in a new land.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTRATION FORM -->
+  <div class="section-header">
+    <div class="section-tag" data-i18n="reg-tag">Join Us</div>
+    <h2 class="section-title" data-i18n="reg-title">Registration Form</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="form-section">
+    <div class="moorish-arch-header">
+      <h2 data-i18n="reg-form-title">Asylum Request – Kingdom of Welcome</h2>
+      <p data-i18n="reg-form-sub">Your information is treated with the utmost care and confidentiality.</p>
+    </div>
+
+    <div class="form-card">
+      <div class="form-section-title" data-i18n="form-sec1">Personal Information</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label data-i18n="field-name">Full Name</label>
+          <input type="text" placeholder="Your full legal name"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-dob">Date of Birth</label>
+          <input type="date"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-nationality">Nationality</label>
+          <input type="text" placeholder="Your country of origin"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-phone">Phone Number</label>
+          <input type="tel" placeholder="+212 xxx xxx xxx"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-id">ID / Passport Number</label>
+          <input type="text" placeholder="Document number"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-email">Email Address</label>
+          <input type="email" placeholder="your@email.com"/>
+        </div>
+      </div>
+
+      <div class="form-section-title" data-i18n="form-sec2">Legal Status</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label data-i18n="field-status">Current Legal Status</label>
+          <select>
+            <option value="">Select status...</option>
+            <option>Asylum Seeker</option>
+            <option>Refugee</option>
+            <option>Stateless Person</option>
+            <option>Internally Displaced</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-entry">Date of Entry to Morocco</label>
+          <input type="date"/>
+        </div>
+      </div>
+
+      <div class="form-section-title" data-i18n="form-sec3">Asylum Request</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label data-i18n="field-reason">Reason for Seeking Asylum</label>
+          <textarea placeholder="Please describe your situation in detail. All information is strictly confidential."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section-title" data-i18n="form-sec4">Supporting Documents</div>
+      <div class="drop-zone" id="dropZone"
+           ondragover="this.style.borderColor='var(--gold)'"
+           ondragleave="this.style.borderColor='var(--border-gold)'"
+           ondrop="event.preventDefault();this.style.borderColor='var(--border-gold)'"
+           onclick="document.getElementById('fileInput').click()">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p data-i18n="drop-text">Drag & drop files here, or click to browse</p>
+        <p style="font-size:0.75rem; margin-top:0.3rem; color: var(--text-secondary)">PDF, JPG, PNG up to 10MB</p>
+        <input type="file" id="fileInput" style="display:none" multiple accept=".pdf,.jpg,.png"/>
+      </div>
+
+      <button class="btn-submit" data-i18n="btn-submit">✦ Submit Request ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== CENTERS SECTION =============================== -->
+<section id="section-centers" class="section">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="centers-tag">Support Network</div>
+    <h2 class="section-title" data-i18n="centers-title">Help & Care Centers</h2>
+    <div class="section-line"></div>
+    <p class="section-desc" data-i18n="centers-desc">Our network of centers across Morocco ensures every refugee receives the support they need, wherever they are.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-i18n="th-code">Service Code</th>
+          <th data-i18n="th-name">Service Name</th>
+          <th data-i18n="th-location">Location</th>
+          <th data-i18n="th-notes">Notes</th>
+          <th data-i18n="th-contact">Contacts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="service-code">HS101</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs101">Emergency Shelter</td>
+          <td><span class="location-badge">Rabat</span></td>
+          <td data-i18n="hs101-n">Immediate accommodation for refugees</td>
+          <td><a class="contact-link" href="tel:+212789xxxxxx">+212 789 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS102</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs102">Legal Assistance</td>
+          <td><span class="location-badge">Rabat</span></td>
+          <td data-i18n="hs102-n">Help with asylum applications</td>
+          <td><a class="contact-link" href="tel:+212689xxxxxx">+212 689 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS103</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs103">Medical Aid</td>
+          <td><span class="location-badge">Casablanca</span></td>
+          <td data-i18n="hs103-n">Free basic health check-ups</td>
+          <td><a class="contact-link" href="tel:+212589xxxxxx">+212 589 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS104</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs104">Food Distribution</td>
+          <td><span class="location-badge">Casablanca</span></td>
+          <td data-i18n="hs104-n">Daily meals for families</td>
+          <td><a class="contact-link" href="tel:+212798xxxxxx">+212 798 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS105</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs105">Job Guidance</td>
+          <td><span class="location-badge">Tangier</span></td>
+          <td data-i18n="hs105-n">Help finding safe employment</td>
+          <td><a class="contact-link" href="tel:+212567xxxxxx">+212 567 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS106</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs106">Education Support</td>
+          <td><span class="location-badge">Tangier</span></td>
+          <td data-i18n="hs106-n">Schools and language classes</td>
+          <td><a class="contact-link" href="tel:+212791xxxxxx">+212 791 xxx xxx</a></td>
+        </tr>
+        <tr>
+          <td><span class="service-code">HS107</span></td>
+          <td style="color:var(--text-primary); font-weight:600;" data-i18n="hs107">Psychological Support</td>
+          <td><span class="location-badge">Tangier</span></td>
+          <td data-i18n="hs107-n">Counseling for trauma victims</td>
+          <td><a class="contact-link" href="tel:+212635xxxxxx">+212 635 xxx xxx</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Map Visual -->
+  <div style="max-width:900px; margin: 3rem auto 2rem; padding: 0 2rem;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-gold); border-radius:20px; padding:2rem; text-align:center; backdrop-filter:blur(10px);">
+      <h3 style="font-family:'Berkshire Swash',cursive; color:var(--gold); margin-bottom:1rem;" data-i18n="cities-title">Our Cities of Welcome</h3>
+      <div style="display:flex; justify-content:center; gap:3rem; flex-wrap:wrap; padding:1rem 0;">
+        <div style="text-align:center; cursor:pointer;" onclick="openCenterModal('rabat')">
+          <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--morocco-green),#004d27);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-size:1.5rem;">🏛️</div>
+          <div style="color:var(--gold);font-family:'Berkshire Swash',cursive;" data-i18n="city-rabat">Rabat</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">2 Centers</div>
+        </div>
+        <div style="text-align:center; cursor:pointer;" onclick="openCenterModal('casablanca')">
+          <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--ochre),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-size:1.5rem;">🌆</div>
+          <div style="color:var(--gold);font-family:'Berkshire Swash',cursive;" data-i18n="city-casa">Casablanca</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">2 Centers</div>
+        </div>
+        <div style="text-align:center; cursor:pointer;" onclick="openCenterModal('tangier')">
+          <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--slate),var(--midnight));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.5rem;font-size:1.5rem;border:1px solid var(--border-gold);">⚓</div>
+          <div style="color:var(--gold);font-family:'Berkshire Swash',cursive;" data-i18n="city-tangier">Tangier</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">3 Centers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== ID CARD SECTION =============================== -->
+<section id="section-idcard" class="section">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="id-tag">Identity & Access</div>
+    <h2 class="section-title" data-i18n="id-title">Refugee ID Card</h2>
+    <div class="section-line"></div>
+    <p class="section-desc" data-i18n="id-desc">Your official humanitarian identity — a symbol of dignity, recognition, and access to a new life.</p>
+  </div>
+
+  <div class="id-section">
+    <div class="id-layout">
+
+      <!-- CARD PREVIEW -->
+      <div>
+        <div class="card-scene">
+          <div class="card-glow"></div>
+          <div class="card-3d" id="idCard3d" onclick="flipCard()">
+            <!-- FRONT -->
+            <div class="card-face card-front">
+              <div class="holo-stripe"></div>
+              <div class="card-header-row">
+                <div class="card-title-block">
+                  <div class="card-title">The Kingdom of Morocco Welcomes You</div>
+                  <div class="card-subtitle">Humanitarian Card</div>
+                </div>
+                <svg class="card-star-sm" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="16,2 19,11 28,11 21,17 24,26 16,21 8,26 11,17 4,11 13,11" fill="#006233" stroke="#D4AF37" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="card-middle-row">
+                <div class="card-photo" id="cardPhoto">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="card-info">
+                  <div class="card-field">
+                    <div class="lbl">Full Name</div>
+                    <div class="val" id="card-name">—</div>
+                  </div>
+                  <div class="card-field">
+                    <div class="lbl">ID Number</div>
+                    <div class="val" id="card-id">KOW-000000</div>
+                  </div>
+                  <div class="card-field">
+                    <div class="lbl">Country of Origin</div>
+                    <div class="val" id="card-origin">—</div>
+                  </div>
+                  <div class="card-field">
+                    <div class="lbl">Residence</div>
+                    <div class="val" id="card-residence">Morocco</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer-row">
+                <div>
+                  <div class="card-status">Verified Resident</div>
+                  <div class="card-access" style="margin-top:4px;">Healthcare · Education · Aid</div>
+                  <div class="card-access">Integration: Community Member</div>
+                  <div class="card-field" style="margin-top:4px;">
+                    <div class="lbl">Registered</div>
+                    <div class="val" id="card-date" style="font-size:0.65rem;">—</div>
+                  </div>
+                </div>
+                <div class="card-qr">
+                  <!-- QR code placeholder -->
+                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                    <rect x="2" y="2" width="16" height="16" fill="none" stroke="#000" stroke-width="2"/>
+                    <rect x="5" y="5" width="10" height="10" fill="#000"/>
+                    <rect x="22" y="2" width="16" height="16" fill="none" stroke="#000" stroke-width="2"/>
+                    <rect x="25" y="5" width="10" height="10" fill="#000"/>
+                    <rect x="2" y="22" width="16" height="16" fill="none" stroke="#000" stroke-width="2"/>
+                    <rect x="5" y="25" width="10" height="10" fill="#000"/>
+                    <rect x="22" y="22" width="4" height="4" fill="#000"/>
+                    <rect x="28" y="22" width="4" height="4" fill="#000"/>
+                    <rect x="34" y="22" width="4" height="4" fill="#000"/>
+                    <rect x="22" y="28" width="4" height="4" fill="#000"/>
+                    <rect x="28" y="32" width="4" height="4" fill="#000"/>
+                    <rect x="34" y="28" width="4" height="4" fill="#000"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <!-- BACK -->
+            <div class="card-face card-back">
+              <div class="holo-stripe"></div>
+              <div class="card-back-stripe"></div>
+              <div class="card-back-text">
+                This card is the property of The Kingdom of Welcome.<br/>
+                For verification: contactthekingdomofwelcome@gmail.com<br/>
+                Unauthorized use is strictly prohibited.<br/>
+                This cardholder is under humanitarian protection.
+              </div>
+              <div class="card-back-logo">✦ The Kingdom of Welcome ✦</div>
+              <div style="margin-top:1rem;">
+                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+                  <polygon points="30,5 35,18 49,18 38,27 42,41 30,33 18,41 22,27 11,18 25,18" fill="rgba(212,175,55,0.3)" stroke="#D4AF37" stroke-width="1.5"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="card-hint" data-i18n="card-hint">Click the card to flip it ↻</p>
+      </div>
+
+      <!-- ID FORM -->
+      <div class="id-form">
+        <div class="id-form-title" data-i18n="id-form-title">Generate Your ID Card</div>
+
+        <div class="form-group">
+          <label data-i18n="field-name">Full Name</label>
+          <input type="text" id="f-name" placeholder="Your full name" oninput="updateCard()"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-id">ID Number</label>
+          <input type="text" id="f-id" placeholder="KOW-000000" oninput="updateCard()"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-nationality">Country of Origin</label>
+          <input type="text" id="f-origin" placeholder="e.g. Syria" oninput="updateCard()"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-residence">Current Residence</label>
+          <select id="f-residence" onchange="updateCard()">
+            <option>Morocco</option>
+            <option>Rabat</option>
+            <option>Casablanca</option>
+            <option>Tangier</option>
+            <option>Marrakech</option>
+            <option>Fez</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-regdate">Registration Date</label>
+          <input type="date" id="f-date" oninput="updateCard()"/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="field-photo">Profile Photo</label>
+          <input type="file" id="f-photo" accept="image/*" onchange="loadPhoto(event)"
+                 style="background:rgba(255,255,255,0.05); border:1px solid var(--border-gold); border-radius:10px; padding:8px; color:var(--text-primary); width:100%;"/>
+        </div>
+
+        <button class="btn-primary" style="width:100%;margin-top:1rem;border:none;cursor:pointer;" onclick="generateCard()" data-i18n="btn-generate">✦ Generate Card</button>
+      </div>
+    </div>
+
+    <!-- 4 BOXES -->
+    <div class="boxes-grid" style="margin-top:3rem;">
+      <div class="box-card" onclick="openBoxModal('conditions')">
+        <div class="box-icon">📜</div>
+        <div class="box-title" data-i18n="box1-t">Conditions & Rules</div>
+        <p class="box-desc" data-i18n="box1-d">Understand the legal requirements, usage policies, and responsibilities tied to your Humanitarian Card.</p>
+      </div>
+      <div class="box-card" onclick="openBoxModal('howto')">
+        <div class="box-icon">📄</div>
+        <div class="box-title" data-i18n="box2-t">How to Get the Card</div>
+        <p class="box-desc" data-i18n="box2-d">Step-by-step guide to registering, submitting your story, and receiving your digital Refugee ID Card.</p>
+      </div>
+      <div class="box-card" onclick="openBoxModal('benefits')">
+        <div class="box-icon">🌟</div>
+        <div class="box-title" data-i18n="box3-t">Benefits</div>
+        <p class="box-desc" data-i18n="box3-d">Discover all the rights, services, and opportunities your Humanitarian ID Card unlocks.</p>
+      </div>
+      <div class="box-card" onclick="openBoxModal('contacts')">
+        <div class="box-icon">📞</div>
+        <div class="box-title" data-i18n="box4-t">Contact & Centers</div>
+        <p class="box-desc" data-i18n="box4-d">Find contact details, addresses, and support information for our centers in Rabat, Tangier, and Casablanca.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== FOOTER =============================== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo-text">✦ The Kingdom of Welcome</div>
+      <p data-i18n="footer-about">A humanitarian refuge offering safe homes, personalized support, and exceptional care to those seeking a dignified new beginning in Morocco.</p>
+      <div class="social-icons">
+        <a class="social-icon" href="#" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        </a>
+        <a class="social-icon" href="#" title="Facebook">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+        <a class="social-icon" href="#" title="Twitter / X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer-nav">Navigation</h4>
+      <ul>
+        <li><a href="#" onclick="showSection('home')" data-i18n="nav-home">Home</a></li>
+        <li><a href="#" onclick="showSection('formula')" data-i18n="nav-formula">Formula</a></li>
+        <li><a href="#" onclick="showSection('centers')" data-i18n="nav-centers">Help & Care Centers</a></li>
+        <li><a href="#" onclick="showSection('idcard')" data-i18n="nav-id">Refugee ID Card</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer-services">Services</h4>
+      <ul>
+        <li data-i18n="hs101">Emergency Shelter</li>
+        <li data-i18n="hs102">Legal Assistance</li>
+        <li data-i18n="hs103">Medical Aid</li>
+        <li data-i18n="hs104">Food Distribution</li>
+        <li data-i18n="hs105">Job Guidance</li>
+        <li data-i18n="hs106">Education Support</li>
+        <li data-i18n="hs107">Psychological Support</li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4 data-i18n="footer-contact">Contact</h4>
+      <ul>
+        <li>📍 Marrakech, Morocco</li>
+        <li><a href="mailto:contactthekingdomofwelcome@gmail.com">contactthekingdomofwelcome@gmail.com</a></li>
+        <li><a href="tel:+2125xxxxxxxx">+212 5xx xxx xxx</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© The Kingdom of Welcome.</span> All rights reserved. · Made with ❤️ for humanity.
+  </div>
+</footer>
+
+<script>
+// ===== LOADER =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1800);
+});
+
+// ===== FLOATING ICONS =====
+const iconSVGs = [
+  '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
+  '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>',
+  '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+];
+const floatContainer = document.getElementById('floatIcons');
+for (let i = 0; i < 12; i++) {
+  const el = document.createElement('div');
+  el.className = 'float-icon';
+  el.innerHTML = iconSVGs[i % 3];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.animationDuration = (20 + Math.random() * 25) + 's';
+  el.style.animationDelay = (-Math.random() * 30) + 's';
+  el.style.fontSize = (20 + Math.random() * 20) + 'px';
+  floatContainer.appendChild(el);
+}
+
+// Calligraphy
+const calliWords = ['مرحبا', 'سلام', 'أهلاً', 'الكرم', 'الأمل'];
+const calliContainer = document.getElementById('calligraphyBg');
+calliWords.forEach((word, i) => {
+  const el = document.createElement('div');
+  el.className = 'calli-text';
+  el.textContent = word;
+  el.style.left = (5 + i * 20) + 'vw';
+  el.style.animationDuration = (35 + i * 5) + 's';
+  el.style.animationDelay = (-i * 7) + 's';
+  calliContainer.appendChild(el);
+});
+
+// Particles
+const particlesContainer = document.getElementById('heroParticles');
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.bottom = '-10px';
+  p.style.animationDuration = (8 + Math.random() * 15) + 's';
+  p.style.animationDelay = (-Math.random() * 20) + 's';
+  p.style.width = (1 + Math.random() * 3) + 'px';
+  p.style.height = p.style.width;
+  p.style.opacity = (0.1 + Math.random() * 0.5);
+  particlesContainer.appendChild(p);
+}
+
+// ===== SECTION SWITCHING =====
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelector(`[data-section="${name}"]`)?.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // close mobile menu
+  document.getElementById('navLinks').classList.remove('open');
+  return false;
+}
+
+// ===== THEME TOGGLE =====
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+}
+
+// ===== LANGUAGE =====
+const translations = {
+  en: {
+    'nav-home': 'Home', 'nav-formula': 'Formula', 'nav-centers': 'Help & Care Centers', 'nav-id': 'Refugee ID Card',
+    'hero-badge': 'Humanitarian Refuge in Morocco', 'hero-sub': 'Welcome to Morocco · Your Second Home',
+    'hero-cta1': 'Begin Your Journey', 'hero-cta2': 'Find Support Centers',
+    'logo-main': 'The Kingdom of Welcome', 'logo-slogan': 'Welcome to Morocco · Your Second Home',
+    'stat1': 'Refugees Welcomed', 'stat2': 'Care Centers', 'stat3': 'Host Cities', 'stat4': 'Satisfaction Rate',
+    'values-tag': 'Our Commitment', 'values-title': 'Built on Moroccan Values',
+    'val1-t': 'Safety', 'val1-d': 'A secure, dignified space where every person is protected and valued.',
+    'val2-t': 'Community', 'val2-d': 'Building bridges between cultures with warmth and respect.',
+    'val3-t': 'Care', 'val3-d': 'Holistic support from medical aid to mental wellness and beyond.',
+    'val4-t': 'Dignity', 'val4-d': 'Every individual deserves to be seen, heard, and celebrated.',
+    'val5-t': 'Growth', 'val5-d': 'Empowering new beginnings through education, work, and opportunity.',
+    'formula-tag': 'Our Program', 'formula-title': 'The Formula',
+    'formula-desc': 'Real stories of transformation, hope, and belonging — from those who found their second home in Morocco.',
+    'formula-intro': 'The Kingdom of Welcome offers a comprehensive humanitarian program combining safe housing, personalized guidance, health support, and community integration.',
+    'reg-tag': 'Join Us', 'reg-title': 'Registration Form',
+    'reg-form-title': 'Asylum Request – Kingdom of Welcome', 'reg-form-sub': 'Your information is treated with the utmost care and confidentiality.',
+    'form-sec1': 'Personal Information', 'form-sec2': 'Legal Status', 'form-sec3': 'Asylum Request', 'form-sec4': 'Supporting Documents',
+    'field-name': 'Full Name', 'field-dob': 'Date of Birth', 'field-nationality': 'Nationality', 'field-phone': 'Phone Number',
+    'field-id': 'ID / Passport Number', 'field-email': 'Email Address', 'field-status': 'Current Legal Status',
+    'field-entry': 'Date of Entry to Morocco', 'field-reason': 'Reason for Seeking Asylum',
+    'drop-text': 'Drag & drop files here, or click to browse', 'btn-submit': '✦ Submit Request ✦',
+    'centers-tag': 'Support Network', 'centers-title': 'Help & Care Centers',
+    'centers-desc': 'Our network of centers across Morocco ensures every refugee receives the support they need, wherever they are.',
+    'th-code': 'Service Code', 'th-name': 'Service Name', 'th-location': 'Location', 'th-notes': 'Notes', 'th-contact': 'Contacts',
+    'hs101': 'Emergency Shelter', 'hs102': 'Legal Assistance', 'hs103': 'Medical Aid', 'hs104': 'Food Distribution',
+    'hs105': 'Job Guidance', 'hs106': 'Education Support', 'hs107': 'Psychological Support',
+    'hs101-n': 'Immediate accommodation for refugees', 'hs102-n': 'Help with asylum applications',
+    'hs103-n': 'Free basic health check-ups', 'hs104-n': 'Daily meals for families',
+    'hs105-n': 'Help finding safe employment', 'hs106-n': 'Schools and language classes', 'hs107-n': 'Counseling for trauma victims',
+    'cities-title': 'Our Cities of Welcome', 'city-rabat': 'Rabat', 'city-casa': 'Casablanca', 'city-tangier': 'Tangier',
+    'id-tag': 'Identity & Access', 'id-title': 'Refugee ID Card',
+    'id-desc': 'Your official humanitarian identity — a symbol of dignity, recognition, and access to a new life.',
+    'card-hint': 'Click the card to flip it ↻', 'id-form-title': 'Generate Your ID Card',
+    'field-residence': 'Current Residence', 'field-regdate': 'Registration Date', 'field-photo': 'Profile Photo',
+    'btn-generate': '✦ Generate Card',
+    'box1-t': 'Conditions & Rules', 'box1-d': 'Understand the legal requirements, usage policies, and responsibilities tied to your Humanitarian Card.',
+    'box2-t': 'How to Get the Card', 'box2-d': 'Step-by-step guide to registering, submitting your story, and receiving your digital Refugee ID Card.',
+    'box3-t': 'Benefits', 'box3-d': 'Discover all the rights, services, and opportunities your Humanitarian ID Card unlocks.',
+    'box4-t': 'Contact & Centers', 'box4-d': 'Find contact details, addresses, and support information for our centers in Rabat, Tangier, and Casablanca.',
+    'footer-about': 'A humanitarian refuge offering safe homes, personalized support, and exceptional care to those seeking a dignified new beginning in Morocco.',
+    'footer-nav': 'Navigation', 'footer-services': 'Services', 'footer-contact': 'Contact',
+  },
+  fr: {
+    'nav-home': 'Accueil', 'nav-formula': 'Formule', 'nav-centers': 'Centres d\'Aide', 'nav-id': 'Carte de Réfugié',
+    'hero-badge': 'Refuge Humanitaire au Maroc', 'hero-sub': 'Bienvenue au Maroc · Votre Deuxième Maison',
+    'hero-cta1': 'Commencer votre voyage', 'hero-cta2': 'Trouver un Centre',
+    'logo-main': 'Le Royaume de Bienvenue', 'logo-slogan': 'Bienvenue au Maroc · Votre Deuxième Maison',
+    'stat1': 'Réfugiés Accueillis', 'stat2': 'Centres de Soin', 'stat3': 'Villes Hôtes', 'stat4': 'Taux de Satisfaction',
+    'values-tag': 'Notre Engagement', 'values-title': 'Fondé sur les Valeurs Marocaines',
+    'val1-t': 'Sécurité', 'val1-d': 'Un espace sécurisé où chaque personne est protégée.',
+    'val2-t': 'Communauté', 'val2-d': 'Créer des ponts entre les cultures avec chaleur.',
+    'val3-t': 'Soin', 'val3-d': 'Soutien global du bien-être médical au mental.',
+    'val4-t': 'Dignité', 'val4-d': 'Chaque individu mérite d\'être vu et célébré.',
+    'val5-t': 'Croissance', 'val5-d': 'Autonomiser les nouveaux départs par l\'éducation.',
+    'formula-tag': 'Notre Programme', 'formula-title': 'La Formule',
+    'formula-desc': 'Histoires réelles de transformation, d\'espoir et d\'appartenance.',
+    'formula-intro': 'Le Royaume de Bienvenue offre un programme humanitaire complet combinant logement sûr et soutien personnalisé.',
+    'reg-tag': 'Rejoignez-nous', 'reg-title': 'Formulaire d\'Inscription',
+    'reg-form-title': 'Demande d\'Asile – Royaume de Bienvenue', 'reg-form-sub': 'Vos informations sont traitées avec la plus grande confidentialité.',
+    'form-sec1': 'Informations Personnelles', 'form-sec2': 'Statut Légal', 'form-sec3': 'Demande d\'Asile', 'form-sec4': 'Documents Justificatifs',
+    'field-name': 'Nom Complet', 'field-dob': 'Date de Naissance', 'field-nationality': 'Nationalité', 'field-phone': 'Numéro de Téléphone',
+    'field-id': 'Numéro de Passeport / ID', 'field-email': 'Adresse Email', 'field-status': 'Statut Légal Actuel',
+    'field-entry': 'Date d\'Entrée au Maroc', 'field-reason': 'Raison de la Demande d\'Asile',
+    'drop-text': 'Glissez les fichiers ici ou cliquez pour parcourir', 'btn-submit': '✦ Soumettre la Demande ✦',
+    'centers-tag': 'Réseau de Soutien', 'centers-title': 'Centres d\'Aide et de Soin',
+    'centers-desc': 'Notre réseau de centres à travers le Maroc garantit que chaque réfugié reçoit le soutien dont il a besoin.',
+    'th-code': 'Code Service', 'th-name': 'Nom du Service', 'th-location': 'Lieu', 'th-notes': 'Notes', 'th-contact': 'Contacts',
+    'hs101': 'Hébergement d\'Urgence', 'hs102': 'Assistance Juridique', 'hs103': 'Aide Médicale', 'hs104': 'Distribution Alimentaire',
+    'hs105': 'Orientation Professionnelle', 'hs106': 'Soutien Éducatif', 'hs107': 'Soutien Psychologique',
+    'hs101-n': 'Hébergement immédiat pour réfugiés', 'hs102-n': 'Aide pour les demandes d\'asile',
+    'hs103-n': 'Bilans de santé gratuits', 'hs104-n': 'Repas quotidiens pour familles',
+    'hs105-n': 'Aide pour trouver un emploi sûr', 'hs106-n': 'Écoles et cours de langue', 'hs107-n': 'Counseling pour victimes traumatisées',
+    'cities-title': 'Nos Villes d\'Accueil', 'city-rabat': 'Rabat', 'city-casa': 'Casablanca', 'city-tangier': 'Tanger',
+    'id-tag': 'Identité & Accès', 'id-title': 'Carte d\'Identité Réfugié',
+    'id-desc': 'Votre identité humanitaire officielle — un symbole de dignité et d\'accès.',
+    'card-hint': 'Cliquez sur la carte pour la retourner ↻', 'id-form-title': 'Générer votre Carte',
+    'field-residence': 'Résidence Actuelle', 'field-regdate': 'Date d\'Inscription', 'field-photo': 'Photo de Profil',
+    'btn-generate': '✦ Générer la Carte',
+    'box1-t': 'Conditions & Règles', 'box1-d': 'Comprendre les exigences légales et les responsabilités liées à votre Carte Humanitaire.',
+    'box2-t': 'Comment Obtenir la Carte', 'box2-d': 'Guide étape par étape pour s\'inscrire et recevoir votre carte.',
+    'box3-t': 'Avantages', 'box3-d': 'Découvrez tous les droits et services que votre carte débloque.',
+    'box4-t': 'Contact & Centres', 'box4-d': 'Informations de contact pour nos centres à Rabat, Tanger et Casablanca.',
+    'footer-about': 'Un refuge humanitaire offrant maisons sûres et soins exceptionnels au Maroc.',
+    'footer-nav': 'Navigation', 'footer-services': 'Services', 'footer-contact': 'Contact',
+  },
+  ar: {
+    'nav-home': 'الرئيسية', 'nav-formula': 'البرنامج', 'nav-centers': 'مراكز الدعم', 'nav-id': 'بطاقة اللاجئ',
+    'hero-badge': 'ملجأ إنساني في المغرب', 'hero-sub': 'مرحباً بكم في المغرب · وطنكم الثاني',
+    'hero-cta1': 'ابدأ رحلتك', 'hero-cta2': 'ابحث عن مركز دعم',
+    'logo-main': 'مملكة الترحيب', 'logo-slogan': 'مرحباً بكم في المغرب · وطنكم الثاني',
+    'stat1': 'لاجئ مرحَّب به', 'stat2': 'مراكز رعاية', 'stat3': 'مدن مضيفة', 'stat4': 'نسبة الرضا',
+    'values-tag': 'التزامنا', 'values-title': 'مبني على القيم المغربية',
+    'val1-t': 'الأمان', 'val1-d': 'مكان آمن وكريم يُحترم فيه كل شخص.',
+    'val2-t': 'المجتمع', 'val2-d': 'بناء جسور بين الثقافات بدفء واحترام.',
+    'val3-t': 'الرعاية', 'val3-d': 'دعم شامل من الرعاية الطبية إلى الصحة النفسية.',
+    'val4-t': 'الكرامة', 'val4-d': 'يستحق كل فرد أن يُرى ويُسمع ويُحتفل به.',
+    'val5-t': 'النمو', 'val5-d': 'تمكين بدايات جديدة من خلال التعليم والعمل.',
+    'formula-tag': 'برنامجنا', 'formula-title': 'البرنامج',
+    'formula-desc': 'قصص حقيقية من التحول والأمل والانتماء.',
+    'formula-intro': 'تقدم مملكة الترحيب برنامجاً إنسانياً شاملاً يجمع بين السكن الآمن والدعم الشخصي.',
+    'reg-tag': 'انضم إلينا', 'reg-title': 'استمارة التسجيل',
+    'reg-form-title': 'طلب اللجوء – مملكة الترحيب', 'reg-form-sub': 'معلوماتك تُعامل بأقصى درجات الحرص والسرية.',
+    'form-sec1': 'المعلومات الشخصية', 'form-sec2': 'الوضع القانوني', 'form-sec3': 'طلب اللجوء', 'form-sec4': 'الوثائق الداعمة',
+    'field-name': 'الاسم الكامل', 'field-dob': 'تاريخ الميلاد', 'field-nationality': 'الجنسية', 'field-phone': 'رقم الهاتف',
+    'field-id': 'رقم الهوية / الجواز', 'field-email': 'البريد الإلكتروني', 'field-status': 'الوضع القانوني الحالي',
+    'field-entry': 'تاريخ الدخول إلى المغرب', 'field-reason': 'سبب طلب اللجوء',
+    'drop-text': 'اسحب الملفات هنا أو انقر للاختيار', 'btn-submit': '✦ تقديم الطلب ✦',
+    'centers-tag': 'شبكة الدعم', 'centers-title': 'مراكز الدعم والرعاية',
+    'centers-desc': 'شبكة مراكزنا في جميع أنحاء المغرب تضمن حصول كل لاجئ على الدعم الذي يحتاجه.',
+    'th-code': 'رمز الخدمة', 'th-name': 'اسم الخدمة', 'th-location': 'الموقع', 'th-notes': 'ملاحظات', 'th-contact': 'التواصل',
+    'hs101': 'مأوى طارئ', 'hs102': 'مساعدة قانونية', 'hs103': 'مساعدة طبية', 'hs104': 'توزيع الغذاء',
+    'hs105': 'توجيه مهني', 'hs106': 'دعم تعليمي', 'hs107': 'دعم نفسي',
+    'hs101-n': 'إيواء فوري للاجئين', 'hs102-n': 'مساعدة في طلبات اللجوء',
+    'hs103-n': 'فحوصات صحية مجانية', 'hs104-n': 'وجبات يومية للعائلات',
+    'hs105-n': 'مساعدة في إيجاد عمل آمن', 'hs106-n': 'مدارس ودورات لغوية', 'hs107-n': 'استشارات لضحايا الصدمات',
+    'cities-title': 'مدننا المضيفة', 'city-rabat': 'الرباط', 'city-casa': 'الدار البيضاء', 'city-tangier': 'طنجة',
+    'id-tag': 'الهوية والوصول', 'id-title': 'بطاقة هوية اللاجئ',
+    'id-desc': 'هويتك الإنسانية الرسمية — رمز الكرامة والاعتراف.',
+    'card-hint': 'انقر على البطاقة لقلبها ↻', 'id-form-title': 'أنشئ بطاقتك',
+    'field-residence': 'مكان الإقامة الحالي', 'field-regdate': 'تاريخ التسجيل', 'field-photo': 'صورة الملف الشخصي',
+    'btn-generate': '✦ إنشاء البطاقة',
+    'box1-t': 'الشروط والقواعد', 'box1-d': 'فهم المتطلبات القانونية والمسؤوليات المرتبطة ببطاقتك الإنسانية.',
+    'box2-t': 'كيفية الحصول على البطاقة', 'box2-d': 'دليل خطوة بخطوة للتسجيل والحصول على بطاقتك الرقمية.',
+    'box3-t': 'المزايا', 'box3-d': 'اكتشف جميع الحقوق والخدمات التي تتيحها بطاقتك.',
+    'box4-t': 'التواصل والمراكز', 'box4-d': 'معلومات تواصل مراكزنا في الرباط وطنجة والدار البيضاء.',
+    'footer-about': 'ملجأ إنساني يوفر مساكن آمنة ودعماً شخصياً ورعاية استثنائية في المغرب.',
+    'footer-nav': 'التنقل', 'footer-services': 'الخدمات', 'footer-contact': 'التواصل',
+  }
+};
+let currentLang = 'en';
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('langLabel').textContent = lang.toUpperCase();
+  document.getElementById('langMenu').classList.remove('open');
+  document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  const t = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+}
+function toggleLang() {
+  document.getElementById('langMenu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.lang-dropdown')) {
+    document.getElementById('langMenu').classList.remove('open');
+  }
+});
+
+// ===== MOBILE MENU =====
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ===== CARD FLIP =====
+function flipCard() {
+  document.getElementById('idCard3d').classList.toggle('flipped');
+}
+
+// ===== CARD UPDATE =====
+function updateCard() {
+  const name = document.getElementById('f-name').value;
+  const id = document.getElementById('f-id').value;
+  const origin = document.getElementById('f-origin').value;
+  const residence = document.getElementById('f-residence').value;
+  const date = document.getElementById('f-date').value;
+  document.getElementById('card-name').textContent = name || '—';
+  document.getElementById('card-id').textContent = id || 'KOW-000000';
+  document.getElementById('card-origin').textContent = origin || '—';
+  document.getElementById('card-residence').textContent = residence || 'Morocco';
+  document.getElementById('card-date').textContent = date ? new Date(date).toLocaleDateString('en-GB') : '—';
+}
+function loadPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const photoEl = document.getElementById('cardPhoto');
+    photoEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;" alt="Photo"/>`;
+  };
+  reader.readAsDataURL(file);
+}
+function generateCard() {
+  updateCard();
+  const card = document.getElementById('idCard3d');
+  card.style.transform = 'rotateY(360deg) scale(1.03)';
+  setTimeout(() => { card.style.transform = ''; }, 700);
+}
+
+// ===== MODALS =====
+const modalData = {
+  conditions: {
+    title: 'Conditions & Rules',
+    body: `<ul class="modal-list">
+      <li>Legal registration is required to obtain and use this card.</li>
+      <li>All personal information provided must be accurate and truthful.</li>
+      <li>Cardholders must respect all Moroccan laws and humanitarian regulations.</li>
+      <li>All required supporting documents must be provided during application.</li>
+      <li>The card must only be used for humanitarian purposes as defined.</li>
+      <li>This card is strictly for personal use only — not transferable.</li>
+      <li>All cardholder data is protected under our privacy policy.</li>
+      <li>The card is electronically linked to your registration file.</li>
+      <li>Any violations or misuse may result in suspension of the card.</li>
+      <li>Cardholders must report any changes in status or residence promptly.</li>
+    </ul>`
+  },
+  howto: {
+    title: 'How to Get the Card',
+    body: `<ul class="modal-list">
+      <li><strong>Step 1 – Register:</strong> Complete the online registration form with accurate personal details.</li>
+      <li><strong>Step 2 – Submit Your Story:</strong> Write a personal statement describing your situation and asylum needs.</li>
+      <li><strong>Step 3 – Upload Documents:</strong> Submit your national ID, passport, proof of residence, and supporting documents.</li>
+      <li><strong>Step 4 – Review Process:</strong> Our team reviews your application within 5–10 business days.</li>
+      <li><strong>Step 5 – Receive Your Card:</strong> Upon approval, your digital humanitarian ID card is issued immediately.</li>
+      <li><strong>Required Documents:</strong> National ID or Passport, Proof of current residence, Any additional supporting documents.</li>
+    </ul>`
+  },
+  benefits: {
+    title: 'Benefits of Your ID Card',
+    body: `<ul class="modal-list">
+      <li>Official identity recognition accepted by Moroccan institutions.</li>
+      <li>Access to free healthcare services at our partner medical centers.</li>
+      <li>Access to education programs, language classes, and vocational training.</li>
+      <li>Social integration support and community connection programs.</li>
+      <li>Protection of your dignity and legal status during your stay.</li>
+      <li>Visibility and verification through QR code technology.</li>
+      <li>Access to food distribution and shelter services.</li>
+      <li>Psychological counseling and mental health support.</li>
+      <li>Job guidance and employment placement assistance.</li>
+    </ul>`
+  },
+  contacts: {
+    title: 'Contact & Centers',
+    body: `
+      <div class="modal-center-detail">
+        <h4>🏛️ Rabat Center</h4>
+        <p>Address: Avenue Mohammed V, Rabat, Morocco<br/>
+        Email: rabat@kingdomofwelcome.ma<br/>
+        Phone: +212 789 xxx xxx / +212 689 xxx xxx<br/>
+        Services: Emergency Shelter · Legal Assistance</p>
+      </div>
+      <div class="modal-center-detail">
+        <h4>🌆 Casablanca Center</h4>
+        <p>Address: Boulevard Hassan II, Casablanca, Morocco<br/>
+        Email: casa@kingdomofwelcome.ma<br/>
+        Phone: +212 589 xxx xxx / +212 798 xxx xxx<br/>
+        Services: Medical Aid · Food Distribution</p>
+      </div>
+      <div class="modal-center-detail">
+        <h4>⚓ Tangier Center</h4>
+        <p>Address: Rue de Fès, Tangier, Morocco<br/>
+        Email: tangier@kingdomofwelcome.ma<br/>
+        Phone: +212 567 xxx xxx / +212 791 xxx xxx<br/>
+        Services: Job Guidance · Education Support · Psychological Support</p>
+      </div>
+      <div class="modal-center-detail">
+        <h4>📧 General Contact</h4>
+        <p>Email: contactthekingdomofwelcome@gmail.com<br/>
+        Phone: +212 5xx xxx xxx<br/>
+        Address: Marrakech, Morocco</p>
+      </div>
+    `
+  }
+};
+
+function openBoxModal(key) {
+  const data = modalData[key];
+  document.getElementById('modal-title-text').textContent = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('modal').classList.add('open');
+}
+function openCenterModal(city) {
+  openBoxModal('contacts');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ===== DRAG & DROP =====
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+if (dropZone && fileInput) {
+  fileInput.addEventListener('change', e => {
+    const names = Array.from(e.target.files).map(f => f.name).join(', ');
+    dropZone.querySelector('p').textContent = '✓ Files selected: ' + names;
+    dropZone.style.borderColor = 'var(--morocco-green)';
+    dropZone.style.background = 'rgba(0,98,51,0.07)';
+  });
+}
+
+// Set today as default registration date
+const today = new Date().toISOString().split('T')[0];
+if (document.getElementById('f-date')) document.getElementById('f-date').value = today;
+updateCard();
+</script>
+</body>
+</html>
